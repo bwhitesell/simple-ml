@@ -4,7 +4,7 @@ Simple python implementations of the most popular machine learning algorithms.
 
 
 ###### Objective
-Increase my familarity with and understanding of the most popular ML tools by personally implementing them
+Increase my familarity with and understanding of the most popular ML tools by implementing them
 in python,
 
 
