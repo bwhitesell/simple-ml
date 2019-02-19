@@ -138,5 +138,72 @@ class DecisionTreeRegressor:
         return dp[feat_n] >= split_val
 
 
+class LinearRegressor:
+
+    def __init__(self, eta, n_epochs=1):
+        self.eta = eta
+        self.n_epochs = n_epochs
+
+    def fit(self, X, Y):
+        self.X = X
+        self.Y = Y
+        self._validate_args()
+
+        self._format_feature_matrix()
+
+        # initialize weights for linear model
+        self.weights = np.random.uniform(-.2, .2, (self.n_features + 1, 1))
+
+        self._optimize()
+
+    def update(self, X, Y)
+        self.X = X
+        self.Y = Y
+        self._validate_args()
+
+        self._format_feature_matrix()
+
+        self._update(self.X, self.Y)
+
+    def _format_feature_matrix(self):
+        self.X = np.hstack((np.ones((self.n_rows, 1)), self.X))
+        self.X = np.matrix(self.X)
+
+    def _validate_args(self):
+        x_shape = self.X.shape
+        y_shape = self.Y.shape
+        if x_shape[0] != y_shape[0]:
+            raise ValueError(f'Invalid argument dimensions, {x_shape} feature array is incompatable' +
+                             f' with {y_shape} target array.')
+        if len(x_shape) != 2 or len(y_shape) != 2:
+            raise ValueError(f'X and y Must be two-dimensional arrays. The X provided is of shape {x_shape}' +
+                             f' and the Y provided is of shape {y_shape}')
+        if y_shape[0] < 1 or x_shape[0] < 1:
+            raise ValueError(f'Y (target) must contain at leat one value and X must contain at leat one row.')
+
+        self._cache_args_metadata()
+
+    def _cache_args_metadata(self):
+        self.n_rows = self.X.shape[0]
+        self.n_features = self.X.shape[1]
+
+    def _cost_function(self, y_true, y_pred):
+        np.sum(np.power(y_true - y_pred, 2)) / y_true.shape[0]
+
+    def _cf_gradient(self, X, Y):
+        return np.asarray(np.transpose(self.X) * (np.matrix(self.X) * self.weights - np.matrix(self.Y)))
+
+    def _update(self, X, Y):
+        grad = self._cf_gradient(X, Y)
+        self.weights = self.weights - self.eta * grad
+
+    def _optimize(self):
+        for epoch in range(self.n_epochs):
+            for i in range(self.n_rows):
+                indx = np.random.randint(self.n_rows)
+                x = self.X[indx]
+                y = self.Y[indx]
+                self._update(x, y)
+
 
 
